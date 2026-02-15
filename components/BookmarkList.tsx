@@ -9,11 +9,23 @@ export default function BookmarkList() {
     const supabase = createClient()
     const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
     const [loading, setLoading] = useState(true)
+    
+    const fetchBookMarks = async ()=>{
+        const { data, error} = await supabase.from("bookmarks").select("*").order("created_at", {ascending: false})
 
+        if(error) {
+            console.error("Fetch failed:", error.message)
+        } else if(data) {
+            setBookmarks(data)
+        }
+        setLoading(false)
+    }
     useEffect(()=> {
         fetchBookMarks()
 
         // In the supabase I don't have access to replicate the database to the warehouse making it so I cannot update in real time. But the alternate solution for this is the interval I have set where every 2 seconds, it'll update the page by polling. With this even if we add any bookmark in the 2nd tab, it'll be displayed instantly in both tabs.
+
+        // Update I got access to real time
         
         const channel = supabase.channel("bookmarks-realtime").on("postgres_changes",
             {
@@ -41,16 +53,6 @@ export default function BookmarkList() {
         }
     },[])
 
-    const fetchBookMarks = async ()=>{
-        const { data, error} = await supabase.from("bookmarks").select("*").order("created_at", {ascending: false})
-
-        if(error) {
-            console.error("Fetch failed:", error.message)
-        } else if(data) {
-            setBookmarks(data)
-        }
-        setLoading(false)
-    }
 
     if(loading){
         return <p className="mt-6 text-center">Loading...</p>
