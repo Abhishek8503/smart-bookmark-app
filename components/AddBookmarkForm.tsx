@@ -15,6 +15,20 @@ export default function AddBookmarkForm() {
         if (!title.trim() || !url.trim()) return
         setLoading(true)
 
+        let formattedUrl = url.trim()
+
+        if (!formattedUrl.startsWith("http://") && !formattedUrl.startsWith("https://")) {
+            formattedUrl = `https://${formattedUrl}`
+        }
+        
+        const regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i
+
+        if(!regex.test(formattedUrl)){
+            alert("Please enter a valid URL.")
+            setLoading(false)
+            return
+        }
+
         const {
             data: {user},
             error: useError,
@@ -27,8 +41,8 @@ export default function AddBookmarkForm() {
         }
 
         const { error } = await supabase.from("bookmarks").insert({
-            title,
-            url,
+            title: title.trim(),
+            url: formattedUrl,
             user_id: user.id,
         })
 
@@ -52,7 +66,7 @@ export default function AddBookmarkForm() {
             className="w-full p-2 border rounded" 
             />
 
-            <input type="url"
+            <input type="text"
             value={url}
             onChange={(e)=> setUrl(e.target.value)}
             placeholder="URL"
