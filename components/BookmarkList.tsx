@@ -34,8 +34,14 @@ export default function BookmarkList() {
                 table: "bookmarks",
             },
             (payload)=>{
-                console.log("Change received!", payload)
-                fetchBookMarks()
+                if (payload.eventType === "INSERT") {
+                    setBookmarks((prev) => [payload.new as Bookmark, ...prev])
+                }
+                if (payload.eventType === "DELETE") {
+                    setBookmarks((prev) =>
+                        prev.filter((b) => b.id !== payload.old.id)
+                    )
+                }
             }
         )
         .subscribe((status) => {
