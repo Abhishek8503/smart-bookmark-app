@@ -4,9 +4,9 @@ A simple, secure bookmark manager built with Next.js (App Router), Supabase, and
 
 ## 🚀 Live Demo
 
-Live URL: [Your Vercel URL Here]
+Live URL: https://smart-bookmark-app-khaki-nu.vercel.app/login
 
-GitHub Repository: [Your GitHub Repo URL Here]
+GitHub Repository: https://github.com/Abhishek8503/smart-bookmark-app
 
 ---
 
@@ -85,15 +85,11 @@ RLS is enabled to ensure users can only access their own data.
 
 ## 🔄 Realtime Updates
 
-- Originally implemented using Supabase postgres_changes. However, logical replication was not available on the current Supabase plan. To satisfy the requirement of updating without page refresh, a polling fallback was implemented:
+- Realtime synchronization is implemented using Supabase Realtime with postgres_changes.
 
-    ```
-    setInterval(() => {
-    fetchBookmarks()
-    }, 2000)
-    ```
+- The application subscribes to database changes on the bookmarks table and updates the UI instantly without requiring a page refresh.
 
- - This ensures bookmark updates appear automatically across multiple tabs.
+- This ensures bookmark updates appear automatically across multiple tabs.
 
 ---
 
@@ -111,6 +107,7 @@ RLS is enabled to ensure users can only access their own data.
 ---
 
 ## ⚠ Challenges Faced & Solutions
+
 ### 1. Supabase SSR Cookie API Deprecation
 - The createServerClient API changed to require getAll and setAll instead of get, set, and remove.
 
@@ -128,7 +125,8 @@ Switched to React.SyntheticEvent<HTMLFormElement> for better type compatibility.
 - Logical replication was unavailable in the current project, preventing realtime database subscriptions.
 
 - Solution:
-Implemented polling as a fallback to ensure updates occur without manual refresh.
+Implemented polling as a fallback to ensure updates occur without manual refresh. 
+Update: The realtime workflow is in effect right now.
 
 ## 🧪 Testing Checklist
 
