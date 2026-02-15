@@ -10,16 +10,6 @@ export default function BookmarkList() {
     const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
     const [loading, setLoading] = useState(true)
 
-    const fetchBookMarks = async ()=>{
-        const { data, error} = await supabase.from("bookmarks").select("*").order("created_at", {ascending: false})
-
-        if(error) {
-            console.error("Fetch failed:", error.message)
-        } else if(data) {
-            setBookmarks(data)
-        }
-        setLoading(false)
-    }
     useEffect(()=> {
         fetchBookMarks()
 
@@ -53,6 +43,16 @@ export default function BookmarkList() {
         }
     },[])
 
+    const fetchBookMarks = async ()=>{
+        const { data, error} = await supabase.from("bookmarks").select("*").order("created_at", {ascending: false})
+
+        if(error) {
+            console.error("Fetch failed:", error.message)
+        } else if(data) {
+            setBookmarks(data)
+        }
+        setLoading(false)
+    }
 
     if(loading){
         return <p className="mt-6 text-center">Loading...</p>
