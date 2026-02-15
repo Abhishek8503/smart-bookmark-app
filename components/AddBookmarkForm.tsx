@@ -15,6 +15,11 @@ export default function AddBookmarkForm() {
         if (!title.trim() || !url.trim()) return
         setLoading(true)
 
+        let formattedUrl = url.trim()
+        if ( !formattedUrl.startsWith("http://") && !formattedUrl.startsWith("https://")) {
+            formattedUrl = `https://${formattedUrl}`
+        }
+
         const {
             data: {user},
             error: useError,
