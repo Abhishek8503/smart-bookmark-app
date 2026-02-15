@@ -9,7 +9,7 @@ export default function BookmarkList() {
     const supabase = createClient()
     const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
     const [loading, setLoading] = useState(true)
-    
+
     const fetchBookMarks = async ()=>{
         const { data, error} = await supabase.from("bookmarks").select("*").order("created_at", {ascending: false})
 
@@ -34,14 +34,8 @@ export default function BookmarkList() {
                 table: "bookmarks",
             },
             (payload)=>{
-                if (payload.eventType === "INSERT") {
-                    setBookmarks((prev) => [payload.new as Bookmark, ...prev])
-                }
-                if (payload.eventType === "DELETE") {
-                    setBookmarks((prev) =>
-                        prev.filter((b) => b.id !== payload.old.id)
-                    )
-                }
+                console.log("Change received!", payload)
+                fetchBookMarks()
             }
         )
         .subscribe((status) => {
