@@ -28,33 +28,11 @@ export default function BookmarkList() {
                     event: "*",
                     schema: "public",
                     table: "bookmarks",
-                    filter: `user_id=eq.${user.id}`,
                 },
-(payload) => {
-  console.log("Change received!", payload)
-
-  const newBookmark = payload.new as Bookmark
-  const oldBookmark = payload.old as Bookmark
-
-  if (payload.eventType === "INSERT") {
-    setBookmarks((prev) => [newBookmark, ...prev])
-  }
-
-  if (payload.eventType === "DELETE") {
-    setBookmarks((prev) =>
-      prev.filter((bookmark) => bookmark.id !== oldBookmark.id)
-    )
-  }
-
-  if (payload.eventType === "UPDATE") {
-    setBookmarks((prev) =>
-      prev.map((bookmark) =>
-        bookmark.id === newBookmark.id ? newBookmark : bookmark
-      )
-    )
-  }
-}
-
+                (payload)=>{
+                    console.log("Change received!", payload)
+                    fetchBookMarks()
+                }
             )
             .subscribe((status) => {
                 console.log("Realtime status:", status)
