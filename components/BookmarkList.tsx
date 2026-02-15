@@ -15,29 +15,27 @@ export default function BookmarkList() {
 
         // In the supabase I don't have access to replicate the database to the warehouse making it so I cannot update in real time. But the alternate solution for this is the interval I have set where every 2 seconds, it'll update the page by polling. With this even if we add any bookmark in the 2nd tab, it'll be displayed instantly in both tabs.
 
-        // const channel = supabase
-        // .channel("bookmarks-realtime")
-        // .on("postgres_changes",
-        //     {
-        //         event: "*",
-        //         schema: "public",
-        //         table: "bookmarks",
-        //     },
-        //     ()=>{
-        //         fetchBookMarks()
-        //     }
-        // )
-        // .subscribe()
+        const channel = supabase.channel("bookmarks-realtime").on("postgres_changes",
+            {
+                event: "*",
+                schema: "public",
+                table: "bookmarks",
+            },
+            ()=>{
+                fetchBookMarks()
+            }
+        )
+        .subscribe()
 
-        const interval = setInterval(() => {
-            fetchBookMarks()
-        }, 2000);
+        // const interval = setInterval(() => {
+        //     fetchBookMarks()
+        // }, 2000);
 
-        return ()=> clearInterval(interval)
+        // return ()=> clearInterval(interval)
 
-        // return ()=> {
-        //     supabase.removeChannel(channel)
-        // }
+        return ()=> {
+            supabase.removeChannel(channel)
+        }
     },[])
 
     const fetchBookMarks = async ()=>{
