@@ -25,7 +25,9 @@ export default function BookmarkList() {
                 fetchBookMarks()
             }
         )
-        .subscribe()
+        .subscribe((status) => {
+            console.log("Realtime status:", status)
+        })
 
         // const interval = setInterval(() => {
         //     fetchBookMarks()
